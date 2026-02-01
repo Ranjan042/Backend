@@ -20,4 +20,14 @@ app.post("/notes", async (req,res)=>{
         note
     })
 })
+
+app.get("/notes",async (req,res)=>{
+  const notes= noteaModel.find();
+
+  res.status(200).json({
+    message:"Notes Ferched successfully",
+    notes
+  })
+})
+
 module.exports=app;
