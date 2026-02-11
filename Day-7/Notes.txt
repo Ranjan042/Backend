@@ -1,0 +1,6 @@
+cluster=>storage+processor
+
+{
+    tittle:-string;
+    descp:-string
+}
