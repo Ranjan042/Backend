@@ -1,8 +1,9 @@
 const UserModel = require("../Models/UserModel");
-const crypto=require("crypto")
+const bcrypt=require("bcryptjs")
 const jwt=require("jsonwebtoken")
 
 async function registerController (req,res){
+    console.log("Register route hited");
     const {email,username,password,bio,profileImage}=req.body;
 
     const isUserAlreadyExists=await UserModel.findOne({
@@ -16,11 +17,11 @@ async function registerController (req,res){
         return res.status(409)
         .json({
             message:"User already exists"+
-            isUserAlreadyExists.email===email ? "Email Already Exists" : "UserName Already Exists"
+            (isUserAlreadyExists.email===email ? "Email Already Exists" : "UserName Already Exists")
         })
     }
 
-    const hash=crypto.createHash("sha256").update(password).digest('hex');
+    const hash=await bcrypt.hash(password,10)
 
     const User=await UserModel.create({
         username,
@@ -62,9 +63,7 @@ async function loginController (req,res){
         })
     }
 
-    const hash=crypto.createHash("sha256").update(password).digest('hex');
-
-    const isPasswordValid=hash==user.password
+    const isPasswordValid=await bcrypt.compare(password,user.password);
 
     if(!isPasswordValid){
         return res.status(401).json({
