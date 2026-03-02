@@ -1,0 +1,31 @@
+const cookieParser = require("cookie-parser");
+const express=require("express");
+const cors=require("cors")
+const morgan=require("morgan")
+const AuthRouter = require("./Routes/AuthRoutes");
+const PostRouter = require("./Routes/PostRoutes");
+const UserRouter = require("./Routes/UserRoutes");
+
+
+const app=express();
+app.get("/", (req, res) => {
+  res.send("Backend is running 🚀");
+  console.log("Bckend is working")
+});
+
+
+app.use(cors({
+  credentials:true,
+  origin:"http://localhost:5173"
+}))
+app.use(cookieParser());
+app.use(express.json());
+app.use(morgan("dev"))
+
+
+app.use("/api/auth",AuthRouter);
+app.use("/api/posts",PostRouter)
+app.use("/api/users",UserRouter)
+
+
+module.exports=app;
