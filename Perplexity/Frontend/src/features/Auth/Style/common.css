@@ -1,0 +1,36 @@
+
+:root {
+
+/* Backgrounds */
+--bg-primary: #020617;       /* main dark background */
+--bg-secondary: #0f172a;     /* section background */
+--card-bg: #111827;          /* card / form background */
+
+/* Borders */
+--border-color: #1f2937;
+
+/* Text */
+--text-primary: #f8fafc;     /* main white text */
+--text-secondary: #94a3b8;   /* secondary gray text */
+
+/* Accent (Buttons / Highlights) */
+--primary: #f08863cb;          /* blue button */
+--primary-hover: #3b6ef5;
+
+/* Input Fields */
+--input-bg: #0b1220;
+--input-border: #1e293b;
+
+/* Status */
+--success: #22c55e;
+--error: #ef4444;
+
+--button:#31b8c6;
+
+}
+
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px #111827 inset !important;
+  -webkit-text-fill-color: var(--text-secondary) !important;
+}

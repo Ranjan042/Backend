@@ -1,0 +1,3 @@
+host: redis-19077.c264.ap-south-1-1.ec2.cloud.redislabs.com
+port: 19077
+password: 9QrgP0w7sBeHSfNH4JScLAHHANZEEBUs
