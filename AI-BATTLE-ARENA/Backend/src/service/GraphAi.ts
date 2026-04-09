@@ -1,10 +1,12 @@
 import { StateGraph, StateSchema, START, END, type GraphNode, type CompiledStateGraph } from "@langchain/langgraph"
 import z from "zod";
-import { GeminiModel,MistralModel,CohoreModel } from "./Models.js";
+import { GeminiModel, MistralModel, CohoreModel } from "./Models.js";
 import { createAgent, HumanMessage, providerStrategy } from "langchain";
+import { TavilyService } from "./internetService.js";
 
 const state = new StateSchema({
     problem: z.string().default(""),
+    web_context: z.string().default(""),
     solution_1: z.string().default(""),
     solution_2: z.string().default(""),
     judge: z.object({
@@ -15,12 +17,33 @@ const state = new StateSchema({
     })
 })
 
+function shouldSearch(query: string) {
+    console.log("Should search Running")
+    return /latest|news|2025|2026|current|today|now/i.test(query);
+}
+
 
 const solutionNode: GraphNode<typeof state> = async (state) => {
 
+    let web = { answer: "", context: [], sources: [] };
+
+    // console.log(shouldSearch(state.problem))
+    //  if (shouldSearch(state.problem)) {
+        // }
+            web = await TavilyService(state.problem);
+    
+    const prompt = `
+Question: ${state.problem}
+
+Web Answer:
+${web.answer}
+
+Extra Context:
+${web.context.join("\n")}
+`;
     const [mistralResponse, cohereResponse] = await Promise.all([
-        MistralModel.invoke(state.problem),
-        CohoreModel.invoke(state.problem)
+        MistralModel.invoke(prompt),
+        CohoreModel.invoke(prompt)
     ])
 
     return {
@@ -80,12 +103,12 @@ const graph = new StateGraph(state)
     .addEdge("judge_node", END)
     .compile()
 
-export default async function (problem: string) { 
+export default async function (problem: string) {
 
     const result = await graph.invoke({
         problem: problem
     })
 
-    return result
+    return result;
 
 }

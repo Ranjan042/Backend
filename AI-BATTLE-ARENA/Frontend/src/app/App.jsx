@@ -1,11 +1,10 @@
-import React from 'react'
-import './App.css'
-const App = () => {
+import './App.css';
+import ChatInterface from './components/ChatInterface';
+
+function App() {
   return (
-    <div>
-      <h1>App</h1>
-    </div>
-  )
+    <ChatInterface />
+  );
 }
 
-export default App
+export default App;
