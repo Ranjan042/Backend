@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import UserMessage from './UserMessage';
 import ArenaResponse from './ArenaResponse';
-import axios from 'axios';
 
 const MOCK_RESPONSE = {
   solution_1: "Here is a clean Python solution using modern syntax:\n\n```python\ndef fib(n):\n    a, b = 0, 1\n    for _ in range(n):\n        a, b = b, a + b\n    return a\n```\n\nThis approach has O(n) time complexity and O(1) space.",
@@ -19,8 +18,6 @@ export default function ChatInterface() {
   const [inputValue, setInputValue] = useState('');
   const endOfMessagesRef = useRef(null);
 
-  console.log(messages)
-
   const scrollToBottom = () => {
     endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -29,19 +26,19 @@ export default function ChatInterface() {
     scrollToBottom();
   }, [messages]);
 
-  const handleSubmit = async (e) => {
+  const handleSend = (e) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
-    setInputValue('');
-    const Response=await axios.post("http://localhost:3000/arena", {problem: inputValue});
+
     const newMessage = {
       id: Date.now(),
       problem: inputValue,
       // simulate the delay or instantly add dummy response
-      ...Response.data
+      ...MOCK_RESPONSE
     };
 
     setMessages([...messages, newMessage]);
+    setInputValue('');
   };
 
   return (
@@ -75,7 +72,7 @@ export default function ChatInterface() {
 
       <div className="p-6 bg-white dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800">
         <div className="max-w-4xl mx-auto">
-          <form onSubmit={handleSubmit} className="relative flex items-center">
+          <form onSubmit={handleSend} className="relative flex items-center">
             <input 
               type="text" 
               value={inputValue}
