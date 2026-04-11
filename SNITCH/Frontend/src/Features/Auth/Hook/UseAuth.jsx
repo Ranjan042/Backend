@@ -1,35 +1,36 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SetUser, SetLoading, SetError } from "../State/Authslice";
-import {Login,Register} from "../Service/AuthApi";
+import { LoginUser, RegisterUser } from "../Service/AuthApi";
 
-export const useAuth=()=>{
-    const dispatch=useDispatch()
+export const useAuth = () => {
+    const dispatch = useDispatch();
+    const { user, loading, error } = useSelector((state) => state.auth);
 
-    const HandleLogin=async({Email,Password})=>{
-        dispatch(SetLoading(true))
+    const HandleLogin = async ({ Email, Password }) => {
+        dispatch(SetLoading(true));
+        dispatch(SetError(null));
         try {
-            const response=await Login({Email,Password})
-            dispatch(SetUser(response.user))
-            dispatch(SetError(null))
+            const response = await LoginUser({ Email, Password });
+            dispatch(SetUser(response.user));
         } catch (error) {
-            dispatch(SetError(error.response.data.message))
-        }finally{
-            dispatch(SetLoading(false))
+            dispatch(SetError(error?.response?.data?.message || "Login failed"));
+        } finally {
+            dispatch(SetLoading(false));
         }
-    }
+    };
 
-    const HandleRegister=async({Email,Contact,Password,FullName,isSeller})=>{
-        dispatch(SetLoading(true))
+    const HandleRegister = async ({ Email, PhoneNumber, Password, FullName, isSeller }) => {
+        dispatch(SetLoading(true));
+        dispatch(SetError(null));
         try {
-            const response=await Register({Email,Contact,Password,FullName,isSeller})
-            dispatch(SetUser(response.user))
-            dispatch(SetError(null))
+            const response = await RegisterUser({ Email, PhoneNumber, Password, FullName, isSeller });
+            dispatch(SetUser(response.user));
         } catch (error) {
-            dispatch(SetError(error.response.data.message))
-        }finally{
-            dispatch(SetLoading(false))
+            dispatch(SetError(error?.response?.data?.message || "Registration failed"));
+        } finally {
+            dispatch(SetLoading(false));
         }
-    }
+    };
 
-    return {HandleLogin,HandleRegister}
-}
+    return { HandleLogin, HandleRegister, user, loading, error };
+};
