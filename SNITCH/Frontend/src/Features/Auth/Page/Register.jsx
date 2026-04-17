@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router';
 import AuthLayout from './AuthLayout';
 import { useAuth } from '../Hook/UseAuth';
+import CWG from './Components/CWG';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -25,6 +26,13 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await HandleRegister(formData);
+    setFormData({
+      FullName: '',
+      Email: '',
+      PhoneNumber: '',
+      Password: '',
+      isSeller: false,
+    });
   };
 
   return (
@@ -150,6 +158,8 @@ const Register = () => {
           </label>
         </div>
 
+       
+
         {/* Submit Button */}
         <div className="animate-fade-up-delay-4 opacity-0 pt-2" style={{ animationDelay: '0.45s' }}>
           <button
@@ -160,6 +170,8 @@ const Register = () => {
             Create Account
           </button>
         </div>
+
+        <CWG />
 
         {/* Login Link */}
         <div className="animate-fade-up-delay-5 opacity-0 text-center pt-2">

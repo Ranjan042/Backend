@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const authApi = axios.create({
-    baseURL: "http://localhost:3000/api/auth",
+    baseURL: "/api/auth",
     withCredentials: true,
 });
 
@@ -29,5 +29,14 @@ export async function LoginUser({Email,Password}) {
         return response.data;
     } catch (error) {
         return error.response.data;
+    }
+}
+
+export async function GetMe() {
+    try {
+        const response = await authApi.get("/me");
+        return response.data;
+    } catch (err) {
+        return err.response.data;
     }
 }

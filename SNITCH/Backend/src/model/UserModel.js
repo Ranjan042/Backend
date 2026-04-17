@@ -12,11 +12,13 @@ const UserSchema=new mongoose.Schema({
     },
     PhoneNumber:{
         type:String,
-        required:true
+        required:false
     },
     Password:{
         type:String,
-        required:true
+        required:function (){
+            return !this.googleId;
+        }
     },
     Role:{
         type:String,
@@ -24,6 +26,9 @@ const UserSchema=new mongoose.Schema({
         default:"buyer",
         required:true,
     },
+    googleId:{
+        type:String
+    }
 })
 
 

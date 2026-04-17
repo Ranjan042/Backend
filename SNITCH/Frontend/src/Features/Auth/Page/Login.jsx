@@ -1,15 +1,26 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, Navigate, useNavigate } from 'react-router';
 import AuthLayout from './AuthLayout';
 import { useAuth } from '../Hook/UseAuth';
+import CWG from './Components/CWG';
+import { useSelector } from 'react-redux';
+
+
 
 const Login = () => {
+  const { HandleLogin } = useAuth();
+  const navigate=useNavigate();
+
+  const user=useSelector(state=>state.auth.user);
+  const loading=useSelector(state=>state.auth.loading)
+
+  if(!loading && user) navigate("/")
+
   const [formData, setFormData] = useState({
     Email: '',
     Password: '',
   });
   const [showPassword, setShowPassword] = useState(false);
-  const { HandleLogin } = useAuth();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -18,6 +29,10 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await HandleLogin(formData);
+    setFormData({
+      Email: '',
+      Password: '',
+    })
   };
 
   return (
@@ -72,6 +87,7 @@ const Login = () => {
               required
               autoComplete="current-password"
             />
+
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
@@ -101,6 +117,10 @@ const Login = () => {
             Sign In
           </button>
         </div>
+
+        <CWG />
+
+        
 
         {/* Register Link */}
         <div className="animate-fade-up-delay-5 opacity-0 text-center pt-2">
