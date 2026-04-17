@@ -4,37 +4,13 @@ const CWG = () => {
   return (
     <a
       href="/api/auth/google"
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "10px",
-        width: "100%",
-        padding: "10px 15px",
-        border: "1px solid #dadce0",
-        borderRadius: "6px",
-        backgroundColor: "#fff",
-        color: "#3c4043",
-        fontWeight: "500",
-        fontSize: "14px",
-        textDecoration: "none",
-        boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
-        transition: "all 0.2s ease",
-      }}
-      onMouseOver={(e) =>
-        (e.currentTarget.style.backgroundColor = "#f7f8f8")
-      }
-      onMouseOut={(e) =>
-        (e.currentTarget.style.backgroundColor = "#fff")
-      }
+      className="flex items-center justify-center gap-3 w-full py-3.5 border border-gray-300 bg-white hover:bg-gray-50 transition-colors text-black font-space text-[11px] font-bold uppercase tracking-[0.15em]"
     >
-      {/* Google Logo */}
       <img
         src="https://developers.google.com/identity/images/g-logo.png"
         alt="Google"
-        style={{ width: "18px", height: "18px" }}
+        className="w-4 h-4"
       />
-
       Continue with Google
     </a>
   );

@@ -27,3 +27,15 @@ export async function GetProducts() {
     }
     
 }
+
+export async function GetAllProducts() {
+    try {
+        const response = await ProductApi.get("/all");
+        console.log(response.data)
+        return response.data;
+    } catch (error) {
+        console.log(error.message)
+        return error.response.data;
+    }
+    
+}

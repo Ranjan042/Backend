@@ -4,7 +4,7 @@ import Login from "../../Features/Auth/Page/Login";
 import ProtectedRoute from "./ProtectedRoute";
 import CreateProduct from "../../Features/products/Pages/CreateProduct";
 import ShowProducts from "../../Features/products/Pages/ShowProducts";
-import Home from "../Page/Home";
+import Home from "../../Features/products/Pages/Home";
 const Approutes=createBrowserRouter([
     {
         path:"/",

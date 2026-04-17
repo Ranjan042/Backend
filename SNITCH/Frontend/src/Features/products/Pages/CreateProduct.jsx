@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { useProduct } from '../Hook/UseProduct'; // Assuming this exists
+import { useProduct } from '../Hook/UseProduct';
 
 const CURRENCIES = ['INR', 'USD', 'EUR', 'GBP'];
 const MAX_IMAGES = 7;
@@ -18,7 +18,7 @@ const CreateProduct = () => {
         priceCurrency: 'INR',
     });
     
-    const [images, setImages] = useState([]); // [{ file, preview }]
+    const [images, setImages] = useState([]);
     const [isDragging, setIsDragging] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
@@ -151,7 +151,6 @@ const CreateProduct = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // Mark all as touched
         const allTouched = Object.keys(formData).reduce((acc, key) => ({...acc, [key]: true}), {});
         setTouched(allTouched);
 
@@ -167,7 +166,7 @@ const CreateProduct = () => {
             images.forEach(img => data.append('images', img.file));
             
             await HandleCreateProduct(data);
-            await new Promise(r => setTimeout(r, 1500)); // Simulating api
+            await new Promise(r => setTimeout(r, 1500)); // Simulating
             
             navigate('/');
         } catch (err) {
@@ -178,57 +177,51 @@ const CreateProduct = () => {
     };
 
     const getInputClass = (fieldName) => `
-        w-full bg-[#1c1b1b] text-white border-b-2 outline-none px-3 py-3 text-base 
-        transition-all duration-300 placeholder:text-[#4d4732] font-[Inter,sans-serif]
+        w-full bg-transparent text-black border-b border-gray-300 outline-none py-3 text-sm 
+        transition-all duration-300 placeholder:text-gray-400 font-inter rounded-none
         ${errors[fieldName] 
-            ? 'border-red-500 focus:border-red-500 shadow-[0_4px_12px_-4px_rgba(239,68,68,0.2)]' 
-            : 'border-[#4d4732] focus:border-[#FFD700] hover:bg-[#232222]'}
+            ? 'border-red-500 focus:border-red-500' 
+            : 'focus:border-black'}
     `;
 
     return (
-        <div className="min-h-screen bg-[#131313] text-[#e5e2e1] font-sans selection:bg-[#FFD700] selection:text-[#131313] overflow-hidden relative">
-            {/* Background Decorative Glow (subtle) */}
-            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#FFD700] opacity-[0.02] rounded-full blur-3xl pointer-events-none transform translate-x-1/3 -translate-y-1/3"></div>
-
+        <div className="min-h-screen bg-white text-black font-inter overflow-hidden relative">
             <div className={`max-w-6xl mx-auto px-6 lg:px-12 transition-all duration-1000 ease-out transform relative z-10 ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
 
                 {/* Nav Brand & Header */}
-                <div className="pt-8 pb-2 flex justify-between items-end">
+                <div className="pt-8 pb-2 flex justify-between items-end border-b border-gray-200 pb-6 mb-10">
                     <div className="flex flex-col">
-                        <span className="text-[#FFD700] text-xs font-bold tracking-[0.25em] uppercase font-[Manrope,sans-serif] mb-6 block animate-pulse">
+                        <span className="text-black text-xs font-bold tracking-[0.25em] uppercase font-space mb-4 block">
                             Snitch.
                         </span>
                         <div className="flex items-center gap-4">
                             <button
                                 onClick={() => navigate(-1)}
-                                className="text-[#d0c6ab] hover:text-[#FFD700] hover:-translate-x-1 transition-all duration-300 text-xl leading-none"
+                                className="text-gray-400 hover:text-black transition-all duration-300 text-xl leading-none"
                                 aria-label="Go back"
                             >
                                 ←
                             </button>
-                            <div className="relative group cursor-default">
-                                <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white font-[Manrope,sans-serif]">
-                                    New Listing
-                                </h1>
-                                <div className="mt-2 h-[2px] w-16 bg-gradient-to-r from-[#e9c400] to-[#FFD700] group-hover:w-full transition-all duration-500 ease-out" />
-                            </div>
+                            <h1 className="text-3xl md:text-4xl font-bold tracking-tighter uppercase text-black font-space">
+                                New Listing
+                            </h1>
                         </div>
                     </div>
                 </div>
 
                 {/* Form */}
-                <form onSubmit={handleSubmit} className="pt-10 pb-20 relative">
+                <form onSubmit={handleSubmit} className="pb-20 relative">
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 lg:items-start">
 
                         {/* ── LEFT COLUMN — text fields ── */}
-                        <div className="flex flex-col gap-10">
+                        <div className="flex flex-col gap-8">
 
                             {/* Product Title */}
                             <div className="flex flex-col gap-2 group">
                                 <label
                                     htmlFor="title"
-                                    className={`text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors duration-300 font-[Inter,sans-serif] ${errors.title ? 'text-red-500' : 'text-[#FFD700]/70 group-focus-within:text-[#FFD700]'}`}
+                                    className={`text-[10px] uppercase font-bold tracking-[0.15em] transition-colors duration-300 font-inter ${errors.title ? 'text-red-500' : 'text-gray-500 group-focus-within:text-black'}`}
                                 >
                                     Product Title
                                 </label>
@@ -249,7 +242,7 @@ const CreateProduct = () => {
                             <div className="flex flex-col gap-2 group">
                                 <label
                                     htmlFor="description"
-                                    className={`text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors duration-300 font-[Inter,sans-serif] ${errors.description ? 'text-red-500' : 'text-[#FFD700]/70 group-focus-within:text-[#FFD700]'}`}
+                                    className={`text-[10px] uppercase font-bold tracking-[0.15em] transition-colors duration-300 font-inter ${errors.description ? 'text-red-500' : 'text-gray-500 group-focus-within:text-black'}`}
                                 >
                                     Description
                                 </label>
@@ -268,13 +261,13 @@ const CreateProduct = () => {
 
                             {/* Price — Amount + Currency */}
                             <div className="flex flex-col gap-2">
-                                <label className="text-[10px] uppercase tracking-[0.2em] font-semibold text-[#FFD700]/70 font-[Inter,sans-serif]">
+                                <label className="text-[10px] uppercase font-bold tracking-[0.15em] text-gray-500 font-inter">
                                     Pricing
                                 </label>
                                 <div className="flex gap-4 items-start">
                                     {/* Amount */}
-                                    <div className="flex flex-col gap-1 flex-[2] group">
-                                        <span className={`text-[9px] uppercase tracking-widest transition-colors ${errors.priceAmount ? 'text-red-500' : 'text-[#999077] group-focus-within:text-[#FFD700]/70'} font-[Inter,sans-serif]`}>Amount</span>
+                                    <div className="flex flex-col gap-1 flex-[2] group relative">
+                                        <span className={`text-[9px] uppercase font-bold tracking-[0.15em] transition-colors ${errors.priceAmount ? 'text-red-500' : 'text-gray-400 group-focus-within:text-black'} font-inter`}>Amount</span>
                                         <input
                                             id="priceAmount"
                                             type="number"
@@ -291,21 +284,20 @@ const CreateProduct = () => {
                                     </div>
                                     {/* Currency */}
                                     <div className="flex flex-col gap-1 flex-[1] group">
-                                        <span className="text-[9px] uppercase tracking-widest text-[#999077] group-focus-within:text-[#FFD700]/70 transition-colors font-[Inter,sans-serif]">Currency</span>
+                                        <span className="text-[9px] uppercase font-bold tracking-[0.15em] text-gray-400 group-focus-within:text-black transition-colors font-inter">Currency</span>
                                         <select
                                             id="priceCurrency"
                                             name="priceCurrency"
                                             value={formData.priceCurrency}
                                             onChange={handleChange}
-                                            className="bg-[#1c1b1b] text-white border-b-2 border-[#4d4732] focus:border-[#FFD700] hover:bg-[#232222] outline-none px-3 py-3 text-base transition-all duration-300 font-[Inter,sans-serif] w-full cursor-pointer appearance-none"
+                                            className="bg-transparent text-black border-b border-gray-300 focus:border-black outline-none py-3 text-sm transition-all duration-300 font-inter w-full cursor-pointer rounded-none"
                                         >
                                             {CURRENCIES.map(c => (
-                                                <option key={c} value={c} className="bg-[#131313]">{c}</option>
+                                                <option key={c} value={c} className="bg-white text-black">{c}</option>
                                             ))}
                                         </select>
                                     </div>
                                 </div>
-                                {errors.priceAmount && <span className="text-red-500 text-xs mt-1 animate-fadeIn">{errors.priceAmount}</span>}
                             </div>
 
                         </div>
@@ -313,10 +305,10 @@ const CreateProduct = () => {
                         {/* ── RIGHT COLUMN — images ── */}
                         <div className="flex flex-col gap-3">
                             <div className="flex items-center justify-between mt-2">
-                                <label className={`text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors font-[Inter,sans-serif] ${errors.images ? 'text-red-500' : 'text-[#FFD700]/70'}`}>
+                                <label className={`text-[10px] uppercase font-bold tracking-[0.15em] transition-colors font-inter ${errors.images ? 'text-red-500' : 'text-gray-500'}`}>
                                     Media Gallery
                                 </label>
-                                <span className={`text-[10px] font-[Inter,sans-serif] transition-colors ${images.length === MAX_IMAGES ? 'text-[#FFD700]' : 'text-[#999077]'}`}>
+                                <span className={`text-[10px] font-inter font-bold tracking-widest transition-colors ${images.length === MAX_IMAGES ? 'text-black' : 'text-gray-400'}`}>
                                     {images.length} / {MAX_IMAGES}
                                 </span>
                             </div>
@@ -330,25 +322,25 @@ const CreateProduct = () => {
                                     onClick={() => fileInputRef.current?.click()}
                                     className={`
                                     relative overflow-hidden group
-                                    border-2 border-dashed rounded-lg px-6 py-12 lg:py-20 flex flex-col items-center gap-4 cursor-pointer transition-all duration-300 ease-out
-                                    ${errors.images ? 'border-red-500/50 bg-red-500/5 hover:border-red-500' : 
+                                    border border-dashed rounded-none px-6 py-12 lg:py-20 flex flex-col items-center gap-4 cursor-pointer transition-all duration-300 ease-out
+                                    ${errors.images ? 'border-red-500 bg-red-50 hover:border-red-600' : 
                                       isDragging
-                                        ? 'border-[#FFD700] bg-[#FFD700]/10 scale-[1.02] shadow-[0_0_30px_rgba(255,215,0,0.15)]'
-                                        : 'border-[#4d4732] hover:border-[#FFD700]/60 hover:bg-[#1c1b1b] hover:shadow-lg'
+                                        ? 'border-black bg-gray-50'
+                                        : 'border-gray-300 hover:border-black hover:bg-gray-50'
                                     }
                                 `}
                                 >
                                     <div className={`transform transition-transform duration-500 ${isDragging ? '-translate-y-2' : 'group-hover:-translate-y-2'}`}>
-                                        <span className={`text-4xl transition-colors duration-300 ${isDragging ? 'text-[#FFD700]' : 'text-[#999077] group-hover:text-[#FFD700]'}`}>
-                                            ↑
+                                        <span className={`text-3xl transition-colors duration-300 ${isDragging ? 'text-black' : 'text-gray-400 group-hover:text-black'}`}>
+                                            +
                                         </span>
                                     </div>
-                                    <div className="text-center">
-                                        <p className="text-sm text-[#d0c6ab] leading-relaxed font-[Inter,sans-serif]">
+                                    <div className="text-center w-full">
+                                        <p className="text-xs text-gray-500 uppercase tracking-widest leading-relaxed font-inter">
                                             Drop high-res images here or{' '}
-                                            <span className="text-[#FFD700] underline underline-offset-4 decoration-[#FFD700]/40 group-hover:decoration-[#FFD700] transition-colors duration-300">browse files</span>
+                                            <span className="text-black font-bold group-hover:underline transition-colors duration-300">browse</span>
                                         </p>
-                                        <p className="text-[10px] text-[#4d4732] uppercase tracking-wider font-[Inter,sans-serif] mt-2 group-hover:text-[#6b6247] transition-colors">
+                                        <p className="text-[10px] text-gray-400 uppercase tracking-widest font-inter mt-3 group-hover:text-gray-500 transition-colors">
                                             Max {MAX_IMAGES} items · Up to {MAX_SIZE_MB}MB each
                                         </p>
                                     </div>
@@ -367,33 +359,29 @@ const CreateProduct = () => {
 
                             {/* Image Previews */}
                             {images.length > 0 && (
-                                <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 gap-3 mt-4">
+                                <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
                                     {images.map((img, index) => (
                                         <div
-                                            key={img.preview} // Better key if using unique previews
-                                            className="relative aspect-square rounded-lg overflow-hidden bg-[#201f1f] group ring-1 ring-white/5 hover:ring-[#FFD700]/50 transition-all duration-300 transform animate-fadeInScale shadow-lg"
+                                            key={img.preview}
+                                            className="relative aspect-[3/4] bg-gray-100 group transition-all duration-300 transform animate-fadeInScale"
                                             style={{ animationDelay: `${index * 50}ms` }}
                                         >
                                             <img
                                                 src={img.preview}
                                                 alt={`Preview ${index + 1}`}
-                                                className="w-full h-full object-cover transform transition-transform duration-700 ease-out group-hover:scale-110"
+                                                className="w-full h-full object-cover grayscale opacity-90 transition-all duration-500 group-hover:grayscale-0 group-hover:opacity-100"
                                             />
-                                            {/* Gradient Overlay */}
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                             
                                             {/* Remove Button */}
                                             <button
                                                 type="button"
                                                 onClick={() => removeImage(index)}
-                                                className="absolute inset-0 flex items-center justify-center scale-75 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 text-white"
+                                                className="absolute inset-0 m-auto w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 text-white bg-black hover:bg-red-500 shadow-xl border-none cursor-pointer"
                                                 aria-label={`Remove image ${index + 1}`}
                                             >
-                                                <div className="bg-red-500/90 hover:bg-red-500 backdrop-blur-sm p-3 rounded-full shadow-xl hover:scale-110 transition-transform">
-                                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                    </svg>
-                                                </div>
+                                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
                                             </button>
                                         </div>
                                     ))}
@@ -405,24 +393,20 @@ const CreateProduct = () => {
                     </div>
 
                     {/* Submit Component */}
-                    <div className="mt-16 lg:mt-20 flex justify-end">
+                    <div className="mt-16 lg:mt-20 border-t border-gray-200 pt-8 flex justify-end">
                         <button
                             type="submit"
                             disabled={isSubmitting}
                             className={`
-                                relative overflow-hidden group
-                                w-full lg:w-auto min-w-[240px] bg-[#FFD700] text-[#131313] font-bold tracking-widest py-4 px-10 rounded-lg 
-                                transition-all duration-300 ease-out font-[Inter,sans-serif] text-sm uppercase
-                                disabled:opacity-70 disabled:cursor-not-allowed
-                                ${!isSubmitting && 'hover:shadow-[0_8px_30px_-4px_rgba(255,215,0,0.4)] hover:-translate-y-1 active:translate-y-0'}
+                                group relative min-w-[240px] bg-black text-white font-space font-bold tracking-[0.2em] py-4 px-10 
+                                transition-colors duration-300 text-xs uppercase cursor-pointer
+                                disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-900 border-none
                             `}
                         >
-                            <div className={`absolute inset-0 bg-white/20 origin-left transform transition-transform duration-500 ease-out ${isSubmitting ? 'translate-x-0 opacity-50' : '-translate-x-full group-hover:translate-x-0'}`}></div>
-                            
                             <span className="relative flex items-center justify-center gap-3">
                                 {isSubmitting ? (
                                     <>
-                                        <svg className="animate-spin h-5 w-5 text-[#131313]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                         </svg>
@@ -431,7 +415,6 @@ const CreateProduct = () => {
                                 ) : (
                                     <>
                                         Publish Listing
-                                        <span className="transform group-hover:translate-x-1 transition-transform">→</span>
                                     </>
                                 )}
                             </span>
@@ -440,14 +423,13 @@ const CreateProduct = () => {
                 </form>
             </div>
 
-            {/* Global animations injected using a small style tag since tailwind.config isn't easily modifiable here */}
             <style dangerouslySetInnerHTML={{__html: `
                 @keyframes fadeInScale {
-                    from { opacity: 0; transform: scale(0.9); }
+                    from { opacity: 0; transform: scale(0.98); }
                     to { opacity: 1; transform: scale(1); }
                 }
                 @keyframes fadeIn {
-                    from { opacity: 0; transform: translateY(-5px); }
+                    from { opacity: 0; transform: translateY(-3px); }
                     to { opacity: 1; transform: translateY(0); }
                 }
                 .animate-fadeInScale {

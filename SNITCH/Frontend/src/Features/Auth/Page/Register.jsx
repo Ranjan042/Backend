@@ -36,14 +36,10 @@ const Register = () => {
   };
 
   return (
-    <AuthLayout title="Create Account" subtitle="Join the SNITCH experience.">
-      <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Full Name */}
-        <div className="animate-fade-up-delay-2 opacity-0">
-          <label
-            htmlFor="register-fullname"
-            className="block font-space text-[10px] font-semibold tracking-[0.2em] uppercase text-gold-500/80 mb-2"
-          >
+    <AuthLayout title="Register" subtitle="Join the SNITCH experience.">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label htmlFor="register-fullname" className="block text-[10px] font-bold uppercase tracking-[0.15em] text-gray-900 mb-2">
             Full Name
           </label>
           <input
@@ -53,18 +49,14 @@ const Register = () => {
             value={formData.FullName}
             onChange={handleChange}
             placeholder="Enter your full name"
-            className="auth-input"
+            className="w-full border-b border-gray-300 py-3 text-sm focus:outline-none focus:border-black transition-colors bg-transparent placeholder-gray-400 rounded-none"
             required
             autoComplete="name"
           />
         </div>
 
-        {/* Email */}
-        <div className="animate-fade-up-delay-2 opacity-0" style={{ animationDelay: '0.25s' }}>
-          <label
-            htmlFor="register-email"
-            className="block font-space text-[10px] font-semibold tracking-[0.2em] uppercase text-gold-500/80 mb-2"
-          >
+        <div>
+          <label htmlFor="register-email" className="block text-[10px] font-bold uppercase tracking-[0.15em] text-gray-900 mb-2">
             Email Address
           </label>
           <input
@@ -74,18 +66,14 @@ const Register = () => {
             value={formData.Email}
             onChange={handleChange}
             placeholder="Enter your email"
-            className="auth-input"
+            className="w-full border-b border-gray-300 py-3 text-sm focus:outline-none focus:border-black transition-colors bg-transparent placeholder-gray-400 rounded-none"
             required
             autoComplete="email"
           />
         </div>
 
-        {/* Contact */}
-        <div className="animate-fade-up-delay-3 opacity-0">
-          <label
-            htmlFor="register-contact"
-            className="block font-space text-[10px] font-semibold tracking-[0.2em] uppercase text-gold-500/80 mb-2"
-          >
+        <div>
+          <label htmlFor="register-contact" className="block text-[10px] font-bold uppercase tracking-[0.15em] text-gray-900 mb-2">
             Contact Number
           </label>
           <input
@@ -95,18 +83,14 @@ const Register = () => {
             value={formData.PhoneNumber}
             onChange={handleChange}
             placeholder="Enter your phone number"
-            className="auth-input"
+            className="w-full border-b border-gray-300 py-3 text-sm focus:outline-none focus:border-black transition-colors bg-transparent placeholder-gray-400 rounded-none"
             required
             autoComplete="tel"
           />
         </div>
 
-        {/* Password */}
-        <div className="animate-fade-up-delay-3 opacity-0" style={{ animationDelay: '0.35s' }}>
-          <label
-            htmlFor="register-password"
-            className="block font-space text-[10px] font-semibold tracking-[0.2em] uppercase text-gold-500/80 mb-2"
-          >
+        <div>
+          <label htmlFor="register-password" className="block text-[10px] font-bold uppercase tracking-[0.15em] text-gray-900 mb-2">
             Password
           </label>
           <div className="relative">
@@ -117,14 +101,14 @@ const Register = () => {
               value={formData.Password}
               onChange={handleChange}
               placeholder="Create a password"
-              className="auth-input pr-12"
+              className="w-full border-b border-gray-300 py-3 pr-10 text-sm focus:outline-none focus:border-black transition-colors bg-transparent placeholder-gray-400 rounded-none"
               required
               autoComplete="new-password"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-gold-500/70 transition-colors duration-300"
+              className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-black transition-colors"
             >
               {showPassword ? (
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -140,46 +124,62 @@ const Register = () => {
           </div>
         </div>
 
-        {/* isSeller Checkbox */}
-        <div className="animate-fade-up-delay-4 opacity-0 flex items-center gap-3 pt-1">
-          <input
-            id="register-isSeller"
-            name="isSeller"
-            type="checkbox"
-            checked={formData.isSeller}
-            onChange={handleChange}
-            className="gold-checkbox"
-          />
+        <div className="flex items-center gap-3 pt-1">
+          <div className="relative flex items-center">
+            <input
+              id="register-isSeller"
+              name="isSeller"
+              type="checkbox"
+              checked={formData.isSeller}
+              onChange={handleChange}
+              className="peer appearance-none w-4 h-4 border border-gray-400 rounded-none checked:bg-black checked:border-black cursor-pointer transition-colors"
+            />
+            <svg 
+              className="absolute left-0 w-4 h-4 text-white pointer-events-none opacity-0 peer-checked:opacity-100" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="3" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            >
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
           <label
             htmlFor="register-isSeller"
-            className="font-inter text-xs text-white/50 cursor-pointer select-none hover:text-white/70 transition-colors duration-300"
+            className="text-[11px] font-bold uppercase tracking-[0.1em] text-gray-600 cursor-pointer select-none hover:text-black transition-colors"
           >
-            Register as a <span className="text-gold-500/80 font-medium">Seller</span>
+            Register as a <span className="text-black">Seller</span>
           </label>
         </div>
 
-       
-
-        {/* Submit Button */}
-        <div className="animate-fade-up-delay-4 opacity-0 pt-2" style={{ animationDelay: '0.45s' }}>
+        <div className="pt-2">
           <button
             type="submit"
-            id="register-submit"
-            className="w-full gold-gradient-hover py-3.5 text-gold-900 font-space text-xs font-bold tracking-[0.2em] uppercase cursor-pointer transition-all duration-400"
+            className="w-full bg-black text-white hover:bg-gray-900 py-3.5 font-space text-xs font-bold tracking-[0.2em] uppercase transition-colors"
           >
             Create Account
           </button>
         </div>
 
+        <div className="relative flex items-center justify-center pt-2">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-200"></div>
+          </div>
+          <div className="relative bg-white px-4 text-[10px] uppercase tracking-widest text-gray-400">
+            Or
+          </div>
+        </div>
+
         <CWG />
 
-        {/* Login Link */}
-        <div className="animate-fade-up-delay-5 opacity-0 text-center pt-2">
-          <p className="font-inter text-xs text-white/30 tracking-wide">
+        <div className="text-center pt-2">
+          <p className="text-[10px] text-gray-500 uppercase tracking-widest">
             Already have an account?{' '}
             <Link
               to="/login"
-              className="text-gold-500 font-semibold hover:text-gold-300 transition-colors duration-300 uppercase tracking-[0.1em]"
+              className="text-black font-bold hover:underline transition-all"
             >
               Sign In
             </Link>

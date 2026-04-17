@@ -48,3 +48,17 @@ export async function GetProductsController(req, res) {
         return res.status(500).json({ message: "Internal Server Error" });
     }
 }
+
+export async function GetAllProductsController(req, res) {
+    try {
+        const products=await ProductModel.find();
+        if(!products){
+            return res.status(404).json({message:"Products Not Found"});
+        }
+        return res.status(200).json({success:true,products});
+
+    } catch (error) {
+        console.log(error.message)
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+}

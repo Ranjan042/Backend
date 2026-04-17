@@ -6,6 +6,7 @@ import { useProduct } from '../Hook/UseProduct';
 const ShowProducts = () => {
     const { HandleGetProducts } = useProduct();
     const { products } = useSelector((state) => state.product);
+    const { user } = useSelector((state) => state.auth);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -13,77 +14,76 @@ const ShowProducts = () => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-[#131313] text-[#e5e2e1] font-['Inter',sans-serif] p-8">
+        <div className="min-h-screen bg-white text-black font-inter pb-20">
             {/* Header section */}
-            <div className="max-w-7xl mx-auto mb-12 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                    <h1 className="text-5xl font-['Space_Grotesk',sans-serif] tracking-tighter text-[#D4AF37] uppercase mb-2">
-                        My Inventory
-                    </h1>
-                    <p className="text-sm tracking-widest uppercase text-[#99907c]">
-                        Your Listed Products
-                    </p>
+            <div className="border-b border-gray-200">
+                <div className="max-w-7xl mx-auto px-6 lg:px-12 py-10 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+                    <div>
+                        <span className="text-gray-500 text-[10px] font-bold tracking-[0.25em] uppercase font-space mb-4 block">
+                            Hello {user?.FullName || 'Seller'}
+                        </span>
+                        <h1 className="text-4xl lg:text-5xl font-space font-bold tracking-tighter uppercase text-black">
+                            Inventory
+                        </h1>
+                        <p className="mt-2 text-xs uppercase tracking-widest text-gray-500">
+                            Manage Your Listed Products
+                        </p>
+                    </div>
+                    <button
+                        onClick={() => navigate('/seller/create-product')}
+                        className="group relative inline-flex items-center justify-center px-8 py-3.5 bg-black text-white font-space font-bold uppercase tracking-[0.2em] transition-colors duration-300 hover:bg-gray-900 w-full sm:w-auto text-xs"
+                    >
+                        <span className="flex items-center gap-3">
+                            <span className="text-lg leading-none mt-[1px]">+</span>
+                            Add Product
+                        </span>
+                    </button>
                 </div>
-                <button
-                    onClick={() => navigate('/seller/create-product')}
-                    className="group relative inline-flex items-center justify-center px-8 py-3 bg-[#D4AF37] text-[#131313] font-['Space_Grotesk',sans-serif] font-bold uppercase tracking-widest overflow-hidden transition-all duration-300 hover:bg-[#e6c148] w-full sm:w-auto shadow-lg"
-                >
-                    <span className="relative z-10 flex items-center gap-2">
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                        </svg>
-                        Add New Product
-                    </span>
-                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
-                </button>
             </div>
 
             {/* Grid section */}
-            <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-                {products?.map((product) => (
-                    <div
-                        key={product._id}
-                        className="group relative bg-[#1c1b1b] p-4 rounded-2xl transition-all duration-500 hover:bg-[#201f1f] hover:-translate-y-2 border border-transparent hover:border-[#D4AF37]/20 shadow-lg"
-                    >
-                        {/* Image Container with Overlay */}
-                        <div className="relative aspect-square overflow-hidden rounded-xl bg-[#0e0e0e] mb-4">
-                            <img
-                                src={product.images?.[0]?.url || 'https://via.placeholder.com/400'}
-                                alt={product.title}
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#131313] via-transparent to-transparent opacity-60"></div>
-                        </div>
+            <div className="max-w-7xl mx-auto px-6 lg:px-12 mt-12 w-full">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 lg:gap-12 w-full">
+                    {products?.map((product) => (
+                        <div
+                            key={product._id}
+                            className="group flex flex-col gap-4 cursor-pointer"
+                        >
+                            {/* Image Container */}
+                            <div className="relative aspect-[3/4] overflow-hidden bg-gray-100">
+                                <img
+                                    src={product.images?.[0]?.url || 'https://images.unsplash.com/photo-1618932260643-eee4a2f652a6?q=80&w=1400&auto=format&fit=crop'}
+                                    alt={product.title}
+                                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                                />
+                                <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            </div>
 
-                        {/* Product Info */}
-                        <div className="flex flex-col gap-2 px-1">
-                            <h2 className="text-lg font-['Space_Grotesk',sans-serif] text-[#e5e2e1] uppercase tracking-wide truncate">
-                                {product.title}
-                            </h2>
-                            <p className="text-xs text-[#99907c] line-clamp-2 min-h-[32px]">
-                                {product.description}
-                            </p>
-
-                            <div className="flex justify-start items-end mt-2">
-                                <div className="flex flex-col">
-                                    <span className="text-[10px] text-[#99907c] uppercase tracking-wider mb-1">
-                                        Price
-                                    </span>
-                                    <span className="text-base font-['Space_Grotesk',sans-serif] text-[#F2CA50]">
-                                        {product.price.currency} {product.price.amount}
-                                    </span>
-                                </div>
+                            {/* Product Info */}
+                            <div className="flex flex-col gap-1 mt-1">
+                                <h2 className="text-[11px] font-bold font-inter text-black uppercase tracking-[0.15em] truncate">
+                                    {product.title}
+                                </h2>
+                                <span className="text-[11px] font-bold font-inter text-red-400 uppercase tracking-[0.2em] block">
+                                    {product.price.currency} {product.price.amount}
+                                </span>
                             </div>
                         </div>
-                    </div>
-                ))}
-            </div>
-
-            {products?.length === 0 && (
-                <div className="flex justify-center items-center h-64">
-                    <p className="text-[#99907c] uppercase tracking-widest text-sm">No products available at the moment.</p>
+                    ))}
                 </div>
-            )}
+
+                {products?.length === 0 && (
+                    <div className="flex flex-col justify-center items-center h-64 border border-dashed border-gray-300 mt-8">
+                        <p className="text-gray-500 uppercase tracking-[0.2em] text-[10px] font-bold mb-4">No products found</p>
+                        <button
+                            onClick={() => navigate('/seller/create-product')}
+                            className="text-black font-bold uppercase tracking-[0.15em] text-[10px] hover:underline decoration-1 underline-offset-4"
+                        >
+                            Create Your First Listing
+                        </button>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

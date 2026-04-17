@@ -116,29 +116,29 @@
   }
 
   body {
-    @apply bg-obsidian text-white font-inter;
+    @apply bg-white text-black font-inter;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   ::selection {
-    background: rgba(212, 175, 55, 0.3);
-    color: #fff;
+    background: rgba(0, 0, 0, 0.1);
+    color: #000;
   }
 
   ::-webkit-scrollbar {
     width: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #0E0E0E;
+    background: #f1f1f1;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(212, 175, 55, 0.3);
+    background: #ccc;
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(212, 175, 55, 0.5);
+    background: #999;
   }
 }
 

@@ -5,16 +5,14 @@ import { useAuth } from '../Hook/UseAuth';
 import CWG from './Components/CWG';
 import { useSelector } from 'react-redux';
 
-
-
 const Login = () => {
   const { HandleLogin } = useAuth();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
-  const user=useSelector(state=>state.auth.user);
-  const loading=useSelector(state=>state.auth.loading)
+  const user = useSelector(state => state.auth.user);
+  const loading = useSelector(state => state.auth.loading);
 
-  if(!loading && user) navigate("/")
+  if(!loading && user) return <Navigate to="/" />;
 
   const [formData, setFormData] = useState({
     Email: '',
@@ -32,19 +30,15 @@ const Login = () => {
     setFormData({
       Email: '',
       Password: '',
-    })
+    });
   };
 
   return (
-    <AuthLayout title="Welcome Back" subtitle="Sign in to your account.">
+    <AuthLayout title="Login" subtitle="Please enter your details to sign in." disableScroll={true}>
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Email Field */}
-        <div className="animate-fade-up-delay-2 opacity-0">
-          <label
-            htmlFor="login-email"
-            className="block font-space text-[10px] font-semibold tracking-[0.2em] uppercase text-gold-500/80 mb-2"
-          >
-            Email Address
+        <div>
+          <label htmlFor="login-email" className="block text-[10px] font-bold uppercase tracking-[0.15em] text-gray-900 mb-2">
+            Email
           </label>
           <input
             id="login-email"
@@ -52,27 +46,23 @@ const Login = () => {
             type="email"
             value={formData.Email}
             onChange={handleChange}
-            placeholder="Enter your email"
-            className="auth-input"
+            placeholder="Email Address"
+            className="w-full border-b border-gray-300 py-3 text-sm focus:outline-none focus:border-black transition-colors bg-transparent placeholder-gray-400 rounded-none"
             required
             autoComplete="email"
           />
         </div>
 
-        {/* Password Field */}
-        <div className="animate-fade-up-delay-3 opacity-0">
+        <div>
           <div className="flex items-center justify-between mb-2">
-            <label
-              htmlFor="login-password"
-              className="font-space text-[10px] font-semibold tracking-[0.2em] uppercase text-gold-500/80"
-            >
+            <label htmlFor="login-password" className="block text-[10px] font-bold uppercase tracking-[0.15em] text-gray-900">
               Password
             </label>
             <button
               type="button"
-              className="font-inter text-[10px] tracking-[0.15em] uppercase text-gold-500/50 hover:text-gold-400 transition-colors duration-300"
+              className="text-[10px] font-bold uppercase tracking-[0.1em] text-gray-500 hover:text-black transition-colors"
             >
-              Forgot Password?
+              Forgot?
             </button>
           </div>
           <div className="relative">
@@ -82,16 +72,15 @@ const Login = () => {
               type={showPassword ? 'text' : 'password'}
               value={formData.Password}
               onChange={handleChange}
-              placeholder="••••••••"
-              className="auth-input pr-12"
+              placeholder="Password"
+              className="w-full border-b border-gray-300 py-3 pr-10 text-sm focus:outline-none focus:border-black transition-colors bg-transparent placeholder-gray-400 rounded-none"
               required
               autoComplete="current-password"
             />
-
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-gold-500/70 transition-colors duration-300"
+              className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-black transition-colors"
             >
               {showPassword ? (
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -107,28 +96,32 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Submit Button */}
-        <div className="animate-fade-up-delay-4 opacity-0 pt-2">
+        <div className="pt-2">
           <button
             type="submit"
-            id="login-submit"
-            className="w-full gold-gradient-hover py-3.5 text-gold-900 font-space text-xs font-bold tracking-[0.2em] uppercase cursor-pointer transition-all duration-400"
+            className="w-full bg-black text-white hover:bg-gray-900 py-3.5 font-space text-xs font-bold tracking-[0.2em] uppercase transition-colors"
           >
             Sign In
           </button>
         </div>
 
+        <div className="relative flex items-center justify-center pt-2">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-200"></div>
+          </div>
+          <div className="relative bg-white px-4 text-[10px] uppercase tracking-widest text-gray-400">
+            Or
+          </div>
+        </div>
+
         <CWG />
 
-        
-
-        {/* Register Link */}
-        <div className="animate-fade-up-delay-5 opacity-0 text-center pt-2">
-          <p className="font-inter text-xs text-white/30 tracking-wide">
+        <div className="text-center pt-2">
+          <p className="text-[10px] text-gray-500 uppercase tracking-widest">
             Don't have an account?{' '}
             <Link
               to="/register"
-              className="text-gold-500 font-semibold hover:text-gold-300 transition-colors duration-300 uppercase tracking-[0.1em]"
+              className="text-black font-bold hover:underline transition-all"
             >
               Register
             </Link>
