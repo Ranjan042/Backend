@@ -12,7 +12,11 @@ const ShowProducts = () => {
     useEffect(() => {
         HandleGetProducts();
     }, []);
-
+    const HandleClick=(e, key) => {
+            e.preventDefault();
+            navigate(`/seller/product/${key}`);
+            console.log(key)
+    }
     return (
         <div className="min-h-screen bg-white text-black font-inter pb-20">
             {/* Header section */}
@@ -50,7 +54,9 @@ const ShowProducts = () => {
                             className="group flex flex-col gap-4 cursor-pointer"
                         >
                             {/* Image Container */}
-                            <div className="relative aspect-[3/4] overflow-hidden bg-gray-100">
+                            <div
+                            onClick={(e)=> HandleClick(e,product._id)}
+                            className="relative aspect-[3/4] overflow-hidden bg-gray-100">
                                 <img
                                     src={product.images?.[0]?.url || 'https://images.unsplash.com/photo-1618932260643-eee4a2f652a6?q=80&w=1400&auto=format&fit=crop'}
                                     alt={product.title}

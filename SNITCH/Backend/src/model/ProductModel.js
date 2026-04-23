@@ -1,47 +1,72 @@
-import e from "express";
 import mongoose from "mongoose";
+import PriceSchema from "./PriceSchema.js";
 
-const ProductSchema=new mongoose.Schema({
-    title:{
-        type:String,
-        required:true
+const ProductSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true
     },
-    description:{
-        type:String,
-        required:true
+    description: {
+        type: String,
+        required: true
     },
-    seller:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"User",
-        required:true
+    seller: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     },
-    price:{
-        amount:{
-            type:Number,
-            required:true
+    price: {
+        amount: {
+            type: Number,
+            required: true
         },
-        currency:{
-            type:String,
-            enum: [ "USD", "EUR", "GBP", "JPY", "INR" ],
-            required:true,
+        currency: {
+            type: String,
+            enum: ["USD", "EUR", "GBP", "JPY", "INR"],
+            required: true,
             default: "INR"
         }
     },
-    images:[
+    images: [
         {
-            url:{
-                type:String,
-                required:true
+            url: {
+                type: String,
+                required: true
             },
         }
     ],
-    
+
+    variant: [
+        {
+            images: [
+                {
+                    url: {
+                        type: String,
+                        required: true
+                    }
+                }
+            ],
+            stock: {
+                type: Number,
+                default: 0
+            },
+            attributes: {
+                type: Map,
+                of: String
+            },
+            price:{
+                type:PriceSchema,
+                required:true,
+            }
+        }
+    ]
+
 },
 
-{
-    timestamps:true
-})
+    {
+        timestamps: true
+    })
 
 
-const ProductModel=mongoose.model("Product",ProductSchema)
+const ProductModel = mongoose.model("Product", ProductSchema)
 export default ProductModel;
