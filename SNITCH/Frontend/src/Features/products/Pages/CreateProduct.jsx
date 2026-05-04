@@ -1,6 +1,9 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useProduct } from '../Hook/UseProduct';
+import { useSelector } from 'react-redux';
+import { FiShoppingCart } from 'react-icons/fi';
+import { UseCart } from '../../Cart/Hook/UseCart.jsx';
 
 const CURRENCIES = ['INR', 'USD', 'EUR', 'GBP'];
 const MAX_IMAGES = 7;
@@ -10,6 +13,10 @@ const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 const CreateProduct = () => {
     const { HandleCreateProduct } = useProduct();
     const navigate = useNavigate();
+    const user = useSelector((state) => state.auth.user);
+    const cart = useSelector((state) => state.cart.cart);
+    const cartItemsCount = cart?.cartItems?.length || 0;
+    const { HandleGetCart } = UseCart();
 
     const [formData, setFormData] = useState({
         title: '',
@@ -21,6 +28,13 @@ const CreateProduct = () => {
     const [images, setImages] = useState([]);
     const [isDragging, setIsDragging] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        if (user) {
+            HandleGetCart();
+        }
+    }, [user]);
+
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState({});
     const [mounted, setMounted] = useState(false);
@@ -207,6 +221,19 @@ const CreateProduct = () => {
                             </h1>
                         </div>
                     </div>
+                    {user && (
+                        <div 
+                            onClick={() => navigate('/cart')}
+                            className="relative cursor-pointer group p-2 mb-1"
+                        >
+                            <FiShoppingCart className="w-5 h-5 text-black group-hover:scale-110 transition-transform" />
+                            {cartItemsCount > 0 && (
+                                <span className="absolute -top-1 -right-1 bg-black text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center border border-white">
+                                    {cartItemsCount}
+                                </span>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 {/* Form */}

@@ -5,20 +5,18 @@ import { useAuth } from "../Hook/UseAuth";
 import CWG from "./Components/CWG";
 import { useSelector } from "react-redux";
 import { useProduct } from "../../products/Hook/UseProduct";
+import { UseCart } from "../../Cart/Hook/UseCart";
 
 const Login = () => {
   const { HandleLogin } = useAuth();
-  const {HandleAddToCart}=useProduct();
+  const {HandleAddToCart}=UseCart();
 
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
-  // console.log("location",location)
-  // console.log("from",from)
   const action = location.state?.action;
   const productid = location.state?.productid;
-  console.log(productid)
-  // console.log("action",action)
+  const variantid = location.state?.varientid;
 
 
   const user = useSelector((state) => state.auth.user);
@@ -49,7 +47,7 @@ const Login = () => {
          navigate(from)
      return;
     }else if(action === "addtocart"){
-        await HandleAddToCart(productid);
+        await HandleAddToCart(productid,variantid);
       navigate('/cart');
       return;
     }else if(user?.Role === "seller"){

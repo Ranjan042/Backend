@@ -6,7 +6,7 @@ import CreateProduct from "../../Features/products/Pages/CreateProduct";
 import ShowProducts from "../../Features/products/Pages/ShowProducts";
 import Home from "../../Features/products/Pages/Home";
 import DetailedProductPage from "../../Features/products/Pages/DetailedProductPage";
-import CartPage from "../../Features/products/Pages/CartPage";
+import CartPage from "../../Features/Cart/Pages/CartPage";
 import SellerDetailedProductPage from "../../Features/products/Pages/SellerDetailedPage";
 const Approutes=createBrowserRouter([
     {

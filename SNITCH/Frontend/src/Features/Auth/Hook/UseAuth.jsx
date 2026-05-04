@@ -38,7 +38,6 @@ export const useAuth = () => {
         dispatch(SetError(null));
         try {
             const response = await GetMe();
-            console.log(response)
             dispatch(SetUser(response.user));
         } catch (error) {
             dispatch(SetError(error?.response?.data?.message || "Registration failed"))

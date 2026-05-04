@@ -2,16 +2,24 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { useProduct } from '../Hook/UseProduct';
+import { FiShoppingCart } from 'react-icons/fi';
+import { UseCart } from '../../Cart/Hook/UseCart.jsx';
 
 const ShowProducts = () => {
     const { HandleGetProducts } = useProduct();
     const { products } = useSelector((state) => state.product);
     const { user } = useSelector((state) => state.auth);
+    const cart = useSelector((state) => state.cart.cart);
+    const cartItemsCount = cart?.cartItems?.length || 0;
+    const { HandleGetCart } = UseCart();
     const navigate = useNavigate();
 
     useEffect(() => {
         HandleGetProducts();
-    }, []);
+        if (user) {
+            HandleGetCart();
+        }
+    }, [user]);
     const HandleClick=(e, key) => {
             e.preventDefault();
             navigate(`/seller/product/${key}`);
@@ -22,26 +30,56 @@ const ShowProducts = () => {
             {/* Header section */}
             <div className="border-b border-gray-200">
                 <div className="max-w-7xl mx-auto px-6 lg:px-12 py-10 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-                    <div>
-                        <span className="text-gray-500 text-[10px] font-bold tracking-[0.25em] uppercase font-space mb-4 block">
-                            Hello {user?.FullName || 'Seller'}
-                        </span>
-                        <h1 className="text-4xl lg:text-5xl font-space font-bold tracking-tighter uppercase text-black">
-                            Inventory
-                        </h1>
-                        <p className="mt-2 text-xs uppercase tracking-widest text-gray-500">
-                            Manage Your Listed Products
-                        </p>
+                    <div className="flex justify-between items-start w-full sm:w-auto">
+                        <div>
+                            <span className="text-gray-500 text-[10px] font-bold tracking-[0.25em] uppercase font-space mb-4 block">
+                                Hello {user?.FullName || 'Seller'}
+                            </span>
+                            <h1 className="text-4xl lg:text-5xl font-space font-bold tracking-tighter uppercase text-black">
+                                Inventory
+                            </h1>
+                            <p className="mt-2 text-xs uppercase tracking-widest text-gray-500">
+                                Manage Your Listed Products
+                            </p>
+                        </div>
+                        {user && (
+                            <div 
+                                onClick={() => navigate('/cart')}
+                                className="relative cursor-pointer group p-2 sm:hidden"
+                            >
+                                <FiShoppingCart className="w-5 h-5 text-black group-hover:scale-110 transition-transform" />
+                                {cartItemsCount > 0 && (
+                                    <span className="absolute -top-1 -right-1 bg-black text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center border border-white">
+                                        {cartItemsCount}
+                                    </span>
+                                )}
+                            </div>
+                        )}
                     </div>
-                    <button
-                        onClick={() => navigate('/seller/create-product')}
-                        className="group relative inline-flex items-center justify-center px-8 py-3.5 bg-black text-white font-space font-bold uppercase tracking-[0.2em] transition-colors duration-300 hover:bg-gray-900 w-full sm:w-auto text-xs"
-                    >
-                        <span className="flex items-center gap-3">
-                            <span className="text-lg leading-none mt-[1px]">+</span>
-                            Add Product
-                        </span>
-                    </button>
+                    <div className="flex items-center gap-6">
+                        {user && (
+                            <div 
+                                onClick={() => navigate('/cart')}
+                                className="relative cursor-pointer group p-2 hidden sm:block"
+                            >
+                                <FiShoppingCart className="w-5 h-5 text-black group-hover:scale-110 transition-transform" />
+                                {cartItemsCount > 0 && (
+                                    <span className="absolute -top-1 -right-1 bg-black text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center border border-white">
+                                        {cartItemsCount}
+                                    </span>
+                                )}
+                            </div>
+                        )}
+                        <button
+                            onClick={() => navigate('/seller/create-product')}
+                            className="group relative inline-flex items-center justify-center px-8 py-3.5 bg-black text-white font-space font-bold uppercase tracking-[0.2em] transition-colors duration-300 hover:bg-gray-900 w-full sm:w-auto text-xs"
+                        >
+                            <span className="flex items-center gap-3">
+                                <span className="text-lg leading-none mt-[1px]">+</span>
+                                Add Product
+                            </span>
+                        </button>
+                    </div>
                 </div>
             </div>
 

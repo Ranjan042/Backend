@@ -6,7 +6,6 @@ const Productslice = createSlice({
     products: [],
     allProducts: [],
     selectedProduct: null,
-    cart: [],
     loading: false,
     error: null,
   },
@@ -20,45 +19,7 @@ const Productslice = createSlice({
     SetSelectedProduct: (state, action) => {
       state.selectedProduct = action.payload;
     },
-    setCart: (state, action) => {
-      state.cart = action.payload;
-    },
-    SetincreaseProductQuantity: (state, action) => {
-      const { productId, variantId } = action.payload;
-
-        const item = state.cart.cartItems.find(
-        (item) =>
-          item.product._id.toString() === productId.toString() &&
-          item.varient.toString() === variantId.toString(),
-      );
-
-
-      if (item) {
-        item.quantity += 1;
-      }
-
-    },
-
-    SetDecreaseProductQuantity: (state, action) => {
-     const { productId, variantId } = action.payload;
-     console.log("Decreasing")
-
-        const item = state.cart.cartItems.find(
-        (item) =>
-          item.product._id.toString() === productId.toString() &&
-          item.varient.toString() === variantId.toString(),
-      );
-
-      console.log("item",item)
-
-      if (item) {
-        item.quantity -= 1;
-        console.log("UPDATED:", item.quantity);
-      } else {
-        console.log("NOT FOUND");
-      }
-    },
-    
+   
     SetLoading: (state, action) => {
       state.loading = action.payload;
     },
@@ -71,11 +32,8 @@ const Productslice = createSlice({
 export const {
   SetProduct,
   SetAllProducts,
-  setCart,
   SetSelectedProduct,
   SetLoading,
   SetError,
-  SetincreaseProductQuantity,
-  SetDecreaseProductQuantity
 } = Productslice.actions;
 export default Productslice.reducer;

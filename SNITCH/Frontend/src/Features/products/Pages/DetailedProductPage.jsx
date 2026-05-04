@@ -2,16 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router';
 import { useProduct } from '../Hook/UseProduct';
 import { useSelector } from 'react-redux';
-
+import { UseCart } from '../../Cart/Hook/UseCart';
+import { FiShoppingCart } from 'react-icons/fi';
 
 
 const DetailedProductPage = () => {
-    const { HandleGetSelectedProduct, HandleAddToCart, selectedProduct, loading } = useProduct();
+    const { HandleGetSelectedProduct,selectedProduct, loading } = useProduct();
+    const { HandleGetCart,HandleAddToCart } = UseCart();
+
 
     const { id } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
     const user = useSelector((state) => state.auth.user);
+    const cart = useSelector((state) => state.cart.cart);
+    const cartItemsCount = cart?.cartItems?.length || 0;
      const [mainImage, setMainImage] = useState('/');
     const [mounted, setMounted] = useState(false);
     const [selectedAttributes, setSelectedAttributes] = useState({});
@@ -24,7 +29,10 @@ const DetailedProductPage = () => {
         if (id) {
             HandleGetSelectedProduct(id);
         }
-    }, [id]);
+        if (user) {
+            HandleGetCart();
+        }
+    }, [id, user]);
 
     // Extract available attributes from variants
     const availableAttributes = React.useMemo(() => {
@@ -76,14 +84,10 @@ const DetailedProductPage = () => {
                 Object.entries(v.attributes).forEach(([k, v]) => {
                     vAttrs[k.trim().toLowerCase()] = v;
                 });
-                console.log("vAttrs",vAttrs)
-                console.log("SelectedAttr",selectedAttributes)
-                // console.log("VAttrLength",vAttrs.length)
-                // Check if all selected attributes match the variant's attributes
+               
                 return Object.entries(selectedAttributes).every(([key, value]) => vAttrs[key] === value) &&
                     Object.keys(vAttrs).length === Object.keys(selectedAttributes).length;
             });
-            console.log("Match",match)
             setActiveVariant(match || null);
             if (match?.images?.length > 0) {
                 setMainImage(match.images[0].url);
@@ -167,6 +171,7 @@ const DetailedProductPage = () => {
                     from: location,
                     action: "addtocart",
                     productid: selectedProduct._id,
+                    varientid: activeVariant?._id,
                 }
             });
         } else {
@@ -179,8 +184,7 @@ const DetailedProductPage = () => {
             navigate("/cart");
         }
     }
-    
-    console.log("Active varient",activeVariant)
+
     const handleBuyNow = () => {
         if (!user) {
             navigate("/login", {
@@ -210,12 +214,27 @@ const DetailedProductPage = () => {
                     >
                         Snitch
                     </span>
-                    <button
-                        onClick={() => navigate(-1)}
-                        className="text-black text-[10px] uppercase font-bold tracking-widest hover:underline decoration-2 underline-offset-4"
-                    >
-                        ← Back
-                    </button>
+                    <div className="flex gap-6 items-center">
+                        {user && (
+                            <div 
+                                onClick={() => navigate('/cart')}
+                                className="relative cursor-pointer group p-2"
+                            >
+                                <FiShoppingCart className="w-5 h-5 text-black group-hover:scale-110 transition-transform" />
+                                {cartItemsCount > 0 && (
+                                    <span className="absolute -top-1 -right-1 bg-black text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center border border-white">
+                                        {cartItemsCount}
+                                    </span>
+                                )}
+                            </div>
+                        )}
+                        <button
+                            onClick={() => navigate(-1)}
+                            className="text-black text-[10px] uppercase font-bold tracking-widest hover:underline decoration-2 underline-offset-4"
+                        >
+                            ← Back
+                        </button>
+                    </div>
                 </div>
             </div>
 

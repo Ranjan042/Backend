@@ -2,17 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../Auth/Hook/UseAuth.jsx';
 import { useProduct } from '../Hook/UseProduct.jsx';
 import { useNavigate } from 'react-router';
+import { useSelector } from 'react-redux';
+import { FiShoppingCart } from 'react-icons/fi';
+import { UseCart } from '../../Cart/Hook/UseCart.jsx';
 
 const Home = () => {
     const { user, loading: authLoading } = useAuth();
+    const { HandleGetCart } = UseCart();
     const { allProducts, HandleGetAllProducts, loading: productsLoading } = useProduct();
     const navigate = useNavigate();
     const [mounted, setMounted] = useState(false);
+    const cart = useSelector((state) => state.cart.cart);
+    const cartItemsCount = cart?.cartItems?.length || 0;
 
     useEffect(() => {
         setMounted(true);
         HandleGetAllProducts();
-    }, []);
+        if (user) {
+            HandleGetCart();
+        }
+    }, [user]);
 
     if (authLoading || (productsLoading && !allProducts)) {
         return (
@@ -49,6 +58,17 @@ const Home = () => {
                                 ) : (
                                     <button onClick={() => {}} className="text-black hover:underline decoration-2 underline-offset-4 transition-all uppercase">Profile</button>
                                 )}
+                                <div 
+                                    onClick={() => navigate('/cart')}
+                                    className="relative cursor-pointer group p-2"
+                                >
+                                    <FiShoppingCart className="w-5 h-5 text-black group-hover:scale-110 transition-transform" />
+                                    {cartItemsCount > 0 && (
+                                        <span className="absolute -top-1 -right-1 bg-black text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center border border-white">
+                                            {cartItemsCount}
+                                        </span>
+                                    )}
+                                </div>
                             </>
                         ) : (
                             <button onClick={() => navigate('/login')} className="text-black hover:underline decoration-2 underline-offset-4 transition-all uppercase">Log In</button>

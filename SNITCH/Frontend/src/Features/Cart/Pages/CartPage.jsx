@@ -1,21 +1,27 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useProduct } from "../Hook/UseProduct";
 import { Link } from "react-router-dom";
+import { UseCart } from "../Hook/UseCart.jsx";
+import {useRazorpay} from  "react-razorpay";
+import {useAuth} from "../../Auth/Hook/UseAuth.jsx"
 
 const CartPage = () => {
-  const { cart } = useSelector((state) => state.product);
+  const { cart } = useSelector((state) => state.cart);
+  const {user}=useSelector((state)=>state.auth);
+  console.log("user",user)
+  console.log("Cart",cart)
 
-  const { HandleGetCart, HandleIncreaseProductQuantity, HandleDecreaseProductQuantity, HandleRemoveFromCart } = useProduct();
+  const { HandleGetCart, HandleIncreaseProductQuantity, HandleDecreaseProductQuantity, HandleRemoveFromCart, HandleCreateCartOrder,HandleVerifyCartOrder} = UseCart();
+  const {error,isLoading,Razorpay}=useRazorpay();
 
-  useEffect(() => {
-    HandleGetCart();
+  useEffect( () => {
+     HandleGetCart();
   }, []);
 
   const cartItems = cart?.cartItems || [];
-  const total = cartItems.reduce((acc, item) => {
-    return acc + (item.product?.price?.amount || 0) * item.quantity;
-  }, 0);
+
+
+  const total = cart?.totalPrice || 0;
 
   const getCurrencySymbol = (currency) =>
     currency === "INR" ? "₹" : currency === "USD" ? "$" : "₹";
@@ -31,6 +37,43 @@ const CartPage = () => {
     "bg-[#e0e5df]",
   ];
 
+  async function HandleChechOut() {
+    const order=await HandleCreateCartOrder();
+    console.log("order",order)
+
+     const options = {
+      key: "rzp_test_SiV9wNN1aZfMOo",
+      amount: order.amount, // Amount in paise
+      currency: order.currency,
+      name: "Snitch",
+      description: "Test Transaction",
+      order_id: order.id, // Generate order_id on server
+      handler: async (response) => {
+        console.log("Verifying Payment")
+        const isValid=await HandleVerifyCartOrder(response);
+        console.log("Verifying Payment",isValid)
+
+        if(isValid){
+          alert("Payment successful!");
+        }else{
+          alert("Payment verification failed. Please contact support.");
+        }
+      },
+      prefill: {
+        name: user?.FullName || "John Doe",
+        email: user?.Email || "john.doe@example.com",
+        contact: user?.PhoneNumber || "9999999999",
+      },
+      theme: {
+        color: "#F37254",
+      },
+    }
+    console.log(options)
+     const paymentObject =
+      new window.Razorpay(options);
+
+    paymentObject.open();
+}
   return (
     <div className="min-h-screen bg-[#e5e5e5] flex items-center justify-center p-4 md:p-8 font-['Space_Grotesk',_sans-serif] tracking-wide text-black selection:bg-black selection:text-white">
       <div className="bg-white w-full max-w-5xl px-8 py-10 sm:px-14 sm:py-16 shadow-xl rounded-sm">
@@ -76,11 +119,7 @@ const CartPage = () => {
             <div className="flex flex-col text-black">
               {cartItems.map((item, index) => {
                 
-                const selectedVariant = item.product?.variant?.find(
-                  (v) => v._id.toString() === item.varient.toString(),
-                );
-
-                // console.log("selectedVarient",selectedVariant)
+                const selectedVariant = cartItems.selectedVariant;
 
                 const bgClass =
                   imageBackgrounds[index % imageBackgrounds.length];
@@ -111,8 +150,8 @@ const CartPage = () => {
                           {item.product?.description ||
                             "Short description of product written here"}
                         </p> */}
-                        {selectedVariant?.attributes && 
-                          Object.entries(selectedVariant.attributes).map(([key, value]) => (
+                        {item?.product?.variant?.attributes && 
+                          Object.entries(item.product.variant.attributes).map(([key, value]) => (
                             <p key={key} className="text-[10px] sm:text-[11px] text-gray-400 mt-1">
                               <span className="font-bold">{key}:</span> {value}
                             </p>
@@ -130,7 +169,7 @@ const CartPage = () => {
                         </span>
                         <div className="flex items-center border border-gray-200 bg-white">
                           <button className="w-7 h-7 flex items-center justify-center text-gray-400 hover:bg-gray-50 hover:text-black transition-colors text-sm"
-                            onClick={() => HandleDecreaseProductQuantity(item.product._id, item.varient)}
+                            onClick={async () => {await HandleDecreaseProductQuantity(item.product._id, item.varient); await HandleGetCart()}}
                           >
                             &minus;
                           </button>
@@ -138,7 +177,7 @@ const CartPage = () => {
                             {item.quantity}
                           </span>
                           <button className="w-7 h-7 flex items-center justify-center text-gray-400 hover:bg-gray-50 hover:text-black transition-colors text-sm"
-                            onClick={() => HandleIncreaseProductQuantity(item.product._id, item.varient)}
+                            onClick={async () => {await HandleIncreaseProductQuantity(item.product._id, item.varient); await HandleGetCart()}}
                           >
                             +
                           </button>
@@ -150,12 +189,12 @@ const CartPage = () => {
                     <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-4 sm:gap-14 shrink-0 w-full sm:w-20 mt-4 sm:mt-0">
                       <span className="text-sm font-bold text-black">
                         {currencySymbol}
-                        {(item.product?.price?.amount || 0).toLocaleString()}
+                        {(item.price?.amount || 0).toLocaleString()}
                       </span>
                       <button
                         className="text-gray-800 hover:text-black font-bold p-1 transition-colors"
                         title="Remove Item"
-                        onClick={() => HandleRemoveFromCart(item.product._id, item.varient)}
+                        onClick={async () => {await HandleRemoveFromCart(item.product._id, item.varient);await HandleGetCart()}}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -189,15 +228,19 @@ const CartPage = () => {
               >
                 Continue shopping
               </Link>
-              <button className="w-full sm:w-auto bg-black text-white px-8 py-3.5 text-[11px] font-bold tracking-wide hover:bg-gray-800 transition-colors leading-none">
+              <button className="w-full sm:w-auto bg-black text-white px-8 py-3.5 text-[11px] font-bold tracking-wide hover:bg-gray-800 transition-colors leading-none"
+                onClick={HandleChechOut}
+              >
                 Proceed to checkout
               </button>
             </div>
           </>
         )}
+        
       </div>
     </div>
+
   );
-};
+}
 
 export default CartPage;

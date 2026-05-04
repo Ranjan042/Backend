@@ -35,6 +35,7 @@ export async function LoginUser({Email,Password}) {
 export async function GetMe() {
     try {
         const response = await authApi.get("/me");
+        console.log(response.data)
         return response.data;
     } catch (err) {
         return err.response.data;
