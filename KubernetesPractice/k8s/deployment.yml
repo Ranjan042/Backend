@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demokubernetes-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+       app: demokubernetes
+  template:
+    metadata:
+      labels:
+        app: demokubernetes
+    spec:
+      containers:
+      - name: demokubernetes-container
+        image: demok8s
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "64Mi"
+            cpu: "250m"

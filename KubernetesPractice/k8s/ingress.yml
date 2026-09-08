@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: demokubernetes-ingress
+  labels:
+    app.kubernetes.io/name: demokubernetes-app
+spec:
+  ingressClassName: nginx
+  rules:
+  - host:
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: demokubernetes-service
+            port: 
+              number: 80
